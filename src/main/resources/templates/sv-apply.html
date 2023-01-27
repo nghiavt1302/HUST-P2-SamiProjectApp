@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAMI</title>
+    <link rel="stylesheet" href="./style/sv-home-style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous"
+    />
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"
+    ></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Roboto;
+        }
+        #header{
+            background-color: #AEE2FF;
+        }
+
+        #header #header-content{
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        #header #header-content img{
+            width: 7%;
+            margin-right: 5px;
+        }
+
+        #header #header-content h1{
+            font-size: 20px;
+            margin-bottom: 0;
+            font-weight: 900;
+            color: #02659a;
+        }
+
+        #header #header-content p{
+            font-size: 15px;
+            margin-bottom: 0;
+            font-weight: 700;
+            color: #34424a;
+        }
+
+        #header #header-content .nav-container a{
+            margin-left: 15px;
+            color: #02659a;
+            text-decoration: none;
+        }
+
+        #body{
+            background-color: #f1f1f1;
+        }
+
+        #body #body-content{
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        #body #body-content #prj-app-title{
+            font-size: larger;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div id="header">
+        <div
+                id="header-content"
+                class="d-flex align-items-center justify-content-between"
+        >
+            <div
+                    class="container d-flex justify-content-between align-items-center"
+                    style="background-color: #aee2ff"
+            >
+                <div class="d-flex align-items-center">
+                    <img src="https://i.imgur.com/MCbDOTd.png" alt="" />
+                    <h1>HỆ THỐNG QUẢN LÝ ĐỒ ÁN</h1>
+                </div>
+                <div class="nav-container">
+                    <nav class="nav">
+                        <p id="curUser"></p>
+                        <a href="#" onclick="">Đăng kí ĐA</a>
+                        <a href="#" onclick="">Quản lý ĐA</a>
+                        <a href="#" onclick="">Tra cứu ĐA</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div id="body">
+    <div id="body-content" class="container">
+        <div id="project-application">
+            <p id="prj-app-title">Đăng kí nguyện vọng</p>
+            <form action="http://localhost:8080/sv-home/app">
+                <label for="prjType">Loại đồ án</label>
+                <select name="prjType" id="prjType">
+                    <option value="DA1">Đồ án 1</option>
+                    <option value="DA2">Đồ án 2</option>
+                    <option value="DATK">Đồ án Thiết kế</option>
+                    <option value="BCTT">Báo cáo Thực tập</option>
+                    <option value="DATN">Đồ án Tốt nghiệp</option></select
+                ><br />
+                <br />
+                <label for="orientation">Định hướng</label>
+                <select name="orientation" id="orientation">
+                    <option value="Mathematics">Toán học</option>
+                    <option value="Infomatics">Tin học</option></select
+                ><br />
+                <br />
+                <label for="orientation">Nguyện vọng 1</label>
+                <select name="opt1" id="opt1">
+                </select><br>
+                <br>
+                <label for="orientation">Nguyện vọng 2</label>
+                <select name="opt2" id="opt2">
+                </select><br>
+                <br>
+                <label for="orientation">Nguyện vọng 3</label>
+                <select name="opt3" id="opt3">
+                </select><br>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <br>
+            <p>Danh sách giảng viên</p>
+            <table id="teacher-list" class="table table-sm table-primary table-bordered table-striped table-hover">
+                <thead class="table-light">
+                <tr>
+                    <td>Mã giảng viên</td>
+                    <td>Họ và tên</td>
+                    <td>Bộ môn</td>
+                    <td>Hướng nghiên cứu</td>
+                </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    // Set Data for teacher options
+    var example_array = {
+        ValueA: "Text A",
+        ValueB: "Text B",
+        ValueC: "Text C",
+    };
+
+    var select1 = document.getElementById("opt1");
+    var select2 = document.getElementById("opt2");
+    var select3 = document.getElementById("opt3");
+    for (index in example_array) {
+        select1.options[select1.options.length] = new Option(
+            example_array[index],
+            index
+        );
+        select2.options[select2.options.length] = new Option(
+            example_array[index],
+            index
+        );
+        select3.options[select3.options.length] = new Option(
+            example_array[index],
+            index
+        );
+    }
+    // Set Data for teacher options
+
+    // Set data for teacher table
+    fetch('http://localhost:8080/teacherList')
+        .then(function (response) {
+            return response.json();
+        }).then(function (apiJsonData) {
+        console.log(apiJsonData);
+        renderDataInTheTable(apiJsonData);
+    })
+
+    function renderDataInTheTable(todos) {
+        const mytable = document.getElementById("teacher-list");
+        todos.forEach(todo => {
+            let newRow = document.createElement("tr");
+            Object.values(todo).forEach((value) => {
+                let cell = document.createElement("td");
+                cell.innerText = value;
+                newRow.appendChild(cell);
+            })
+            mytable.appendChild(newRow);
+        });
+    }
+    //Set data for teacher table
+
+    //Display current Username
+    function getUsername(){
+        var xhttp = new XMLHttpRequest();
+        let url = "http://localhost:8080/username"
+        xhttp.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("curUser").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+    getUsername();
+    //Display current Username
+
+</script>
+</body>
+</html>
