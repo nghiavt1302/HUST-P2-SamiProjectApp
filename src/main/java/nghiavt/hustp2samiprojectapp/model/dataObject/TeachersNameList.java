@@ -8,12 +8,10 @@ import org.hibernate.annotations.Subselect;
 
 @Entity
 @Immutable
-@Subselect("SELECT teacher_id, full_name as fullname, department, expertise FROM teacher")
+@Subselect("SELECT teacher_id, full_name as fullname FROM teacher")
 @Data
-public class TeacherListForApplying {
+public class TeachersNameList {
     @Id
     private String teacherId;
     private String fullname;
-    private String department;
-    private String expertise;
 }

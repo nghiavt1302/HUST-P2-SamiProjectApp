@@ -7,7 +7,7 @@ import nghiavt.hustp2samiprojectapp.constant.RoleEnum;
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class MyUser {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)

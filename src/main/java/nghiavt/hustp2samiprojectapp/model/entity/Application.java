@@ -19,7 +19,8 @@ public class Application {
 
     private String term;
 
-    private String orientation;
+    private String orient1;
+    private String orient2;
 
     private String opt1;
 

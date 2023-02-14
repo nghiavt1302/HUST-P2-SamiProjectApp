@@ -25,6 +25,5 @@ public class Student {
     private float cpa;
 
     private String phone;
-    @Column(name = "user_id")
-    private Integer userId;
+    private String email;
 }

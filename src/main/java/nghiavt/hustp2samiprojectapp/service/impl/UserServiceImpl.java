@@ -1,2 +1,4 @@
-package nghiavt.hustp2samiprojectapp.service.impl;public class UserServiceImpl {
+package nghiavt.hustp2samiprojectapp.service.impl;
+
+public class UserServiceImpl {
 }

@@ -1,2 +1,4 @@
-package nghiavt.hustp2samiprojectapp.service;public interface UserService {
+package nghiavt.hustp2samiprojectapp.service;
+
+public interface UserService {
 }

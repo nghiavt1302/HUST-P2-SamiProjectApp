@@ -97,7 +97,7 @@
                 <div class="nav-container">
                     <nav class="nav">
                         <p id="curUser"></p>
-                        <a href="#" onclick="">Đăng kí ĐA</a>
+                        <a href="sv-homeinfo" onclick="">Thông tin cá nhân</a>
                         <a href="#" onclick="">Quản lý ĐA</a>
                         <a href="#" onclick="">Tra cứu ĐA</a>
                     </nav>
@@ -110,35 +110,68 @@
     <div id="body-content" class="container">
         <div id="project-application">
             <p id="prj-app-title">Đăng kí nguyện vọng</p>
-            <form action="http://localhost:8080/sv-home/app">
-                <label for="prjType">Loại đồ án</label>
-                <select name="prjType" id="prjType">
-                    <option value="DA1">Đồ án 1</option>
-                    <option value="DA2">Đồ án 2</option>
-                    <option value="DATK">Đồ án Thiết kế</option>
-                    <option value="BCTT">Báo cáo Thực tập</option>
-                    <option value="DATN">Đồ án Tốt nghiệp</option></select
-                ><br />
-                <br />
-                <label for="orientation">Định hướng</label>
-                <select name="orientation" id="orientation">
-                    <option value="Mathematics">Toán học</option>
-                    <option value="Infomatics">Tin học</option></select
-                ><br />
-                <br />
-                <label for="orientation">Nguyện vọng 1</label>
-                <select name="opt1" id="opt1">
-                </select><br>
-                <br>
-                <label for="orientation">Nguyện vọng 2</label>
-                <select name="opt2" id="opt2">
-                </select><br>
-                <br>
-                <label for="orientation">Nguyện vọng 3</label>
-                <select name="opt3" id="opt3">
-                </select><br>
-                <br>
-                <input type="submit" value="Submit">
+            <form action="http://localhost:8080/sv-apply/send">
+                <div class="row mb-3">
+                    <label for="prjType" class="col-sm-2 col-form-label">Loại đồ án</label>
+                    <div class="col-sm-10">
+                        <select name="prjType" id="prjType">
+                            <option value="DA1">Đồ án 1</option>
+                            <option value="DA2">Đồ án 2</option>
+                            <option value="DATK">Đồ án Thiết kế</option>
+                            <option value="BCTT">Báo cáo Thực tập</option>
+                            <option value="DATN">Đồ án Tốt nghiệp</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="orient1" class="col-sm-2 col-form-label">Định hướng 1</label>
+                    <div class="col-sm-10">
+                        <select name="orient1" id="orient1">
+                            <option value="" disabled selected>Định hướng</option>
+                            <option value="PPNN">Các phương pháp ngẫu nhiên</option>
+                            <option value="PPTU">Các phương pháp tối ưu</option>
+                            <option value="TTKH">Tính toán khoa học và ứng dụng</option>
+                            <option value="TH">Tin học</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="orient2" class="col-sm-2 col-form-label">Định hướng 2</label>
+                    <div class="col-sm-10">
+                        <select name="orient2" id="orient2">
+                            <option value="" disabled selected>Định hướng</option>
+                            <option value="PPNN">Các phương pháp ngẫu nhiên</option>
+                            <option value="PPTU">Các phương pháp tối ưu</option>
+                            <option value="TTKH">Tính toán khoa học và ứng dụng</option>
+                            <option value="TH">Tin học</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="opt1" class="col-sm-2 col-form-label">Nguyện vọng 1</label>
+                    <div class="col-sm-10">
+                        <select name="opt1" id="opt1"></select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="opt2" class="col-sm-2 col-form-label">Nguyện vọng 2</label>
+                    <div class="col-sm-10">
+                        <select name="opt2" id="opt2"></select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="opt3" class="col-sm-2 col-form-label">Nguyện vọng 3</label>
+                    <div class="col-sm-10">
+                        <select name="opt3" id="opt3">
+                        </select>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <button type="submit" class="btn btn-primary">
+                        Gửi đăng kí
+                    </button>
+                </div>
             </form>
             <br>
             <p>Danh sách giảng viên</p>
@@ -159,37 +192,36 @@
 </div>
 <script>
     // Set Data for teacher options
-    var example_array = {
-        ValueA: "Text A",
-        ValueB: "Text B",
-        ValueC: "Text C",
-    };
+    var teachersName;
+    fetch("http://localhost:8080/api/getTeachersName")
+        .then(function (response){
+            return response.json();
+        }).then(function (Data){
+            teachersName = Data;
+            console.log(teachersName);
+            setOptions("opt1", Data);
+            setOptions("opt2", Data);
+            setOptions("opt3", Data);
 
-    var select1 = document.getElementById("opt1");
-    var select2 = document.getElementById("opt2");
-    var select3 = document.getElementById("opt3");
-    for (index in example_array) {
-        select1.options[select1.options.length] = new Option(
-            example_array[index],
-            index
-        );
-        select2.options[select2.options.length] = new Option(
-            example_array[index],
-            index
-        );
-        select3.options[select3.options.length] = new Option(
-            example_array[index],
-            index
+    })
+
+    function setOptions(element, data){
+        var select = document.getElementById(element).options;
+        let options = data;
+        options.forEach(option =>
+            select.add(
+                new Option(option.teacherId +" - "+ option.fullname, option.teacherId)
+            )
         );
     }
     // Set Data for teacher options
+ //////////////////////////////////////////////////////////////////
 
     // Set data for teacher table
     fetch('http://localhost:8080/teacherList')
         .then(function (response) {
             return response.json();
         }).then(function (apiJsonData) {
-        console.log(apiJsonData);
         renderDataInTheTable(apiJsonData);
     })
 
@@ -206,6 +238,7 @@
         });
     }
     //Set data for teacher table
+///////////////////////////////////////////////////////////////////////
 
     //Display current Username
     function getUsername(){
