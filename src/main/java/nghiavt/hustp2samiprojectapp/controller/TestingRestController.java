@@ -5,8 +5,10 @@ import nghiavt.hustp2samiprojectapp.model.dataObject.TeacherListForApplying;
 import nghiavt.hustp2samiprojectapp.model.dataObject.TeachersNameList;
 import nghiavt.hustp2samiprojectapp.model.entity.Application;
 import nghiavt.hustp2samiprojectapp.model.entity.Student;
+import nghiavt.hustp2samiprojectapp.model.entity.Teacher;
 import nghiavt.hustp2samiprojectapp.repository.ApplicationRepository;
 import nghiavt.hustp2samiprojectapp.repository.StudentRepository;
+import nghiavt.hustp2samiprojectapp.repository.TeacherRepository;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeacherListForApplyingRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeachersNameListRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TermRepo;
@@ -27,6 +29,8 @@ public class TestingRestController {
     ApplicationRepository applicationRepository;
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    TeacherRepository teacherRepository;
     @Autowired
     TeachersNameListRepo teachersNameListRepo;
     @Autowired
@@ -109,11 +113,38 @@ public class TestingRestController {
     }
 
     @CrossOrigin
+    @GetMapping("/gv-homeinfo/update")
+    public String updateTeacherInfo(@RequestParam(name = "expertise") String expertise,
+                                    @RequestParam(name = "phone") String phone,
+                                    Authentication authentication) {
+        String email = currentUserName(authentication);
+        List<Teacher> teachers = teacherRepository.findByEmail(email);
+        Teacher update = teachers.get(0);
+        if (!expertise.isEmpty()){
+            update.setExpertise(expertise);
+        }
+        if (!phone.isEmpty()){
+            update.setPhone(phone);
+        }
+        teacherRepository.save(update);
+        return "Sucess!";
+    }
+
+
+    @CrossOrigin
     @GetMapping("/api/getCurStudentInfo")
     public Student getCurStudentInfo(Authentication authentication){
         String email = currentUserName(authentication);
         List<Student> students = studentRepository.findByEmail(email);
         return students.get(0);
+    }
+
+    @CrossOrigin
+    @GetMapping("/api/getCurTeacherInfo")
+    public Teacher getCurTeacherInfo(Authentication authentication){
+        String email = currentUserName(authentication);
+        List<Teacher> teachers = teacherRepository.findByEmail(email);
+        return teachers.get(0);
     }
 
 

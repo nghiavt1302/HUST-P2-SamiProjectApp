@@ -17,5 +17,11 @@ public class TestingController {
     public String studentInfo(){
         return "sv-homeinfo";
     }
+
+    @CrossOrigin
+    @GetMapping("/gv-homeinfo")
+    public String teacherInfo(){
+        return "gv-homeinfo";
+    }
 }
 

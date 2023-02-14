@@ -15,9 +15,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests()
-                .anyRequest().permitAll()
-//                .requestMatchers("/sv-homeinfo").hasAuthority("STUDENT")
-//                .requestMatchers("/sv-apply").hasAuthority("TEACHER")
+                .requestMatchers("/", "/termNow", "/teacherList", "/username", "/api/**").permitAll()
+                .requestMatchers("/sv-homeinfo/**", "/sv-apply/**").hasAuthority("STUDENT")
+                .requestMatchers("/gv-homeinfo/**").hasAuthority("TEACHER")
                 .and().formLogin()
                 .successHandler(((request, response, authentication) -> {
                     String targetUrl ="/login";
@@ -25,6 +25,9 @@ public class SecurityConfig {
                     for (GrantedAuthority authority : authorities){
                         if (authority.getAuthority().equals("STUDENT")){
                             targetUrl = "/sv-homeinfo";
+                            break;
+                        }else if (authority.getAuthority().equals("TEACHER")){
+                            targetUrl = "/gv-homeinfo";
                             break;
                         }
                     }

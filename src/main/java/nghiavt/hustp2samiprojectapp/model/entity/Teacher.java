@@ -21,6 +21,6 @@ public class Teacher {
     private String expertise;
 
     private Integer quota;
-    @Column(name = "user_id")
-    private Integer userId;
+
+    private String email;
 }
