@@ -9,17 +9,15 @@ import nghiavt.hustp2samiprojectapp.model.entity.Teacher;
 import nghiavt.hustp2samiprojectapp.repository.ApplicationRepository;
 import nghiavt.hustp2samiprojectapp.repository.StudentRepository;
 import nghiavt.hustp2samiprojectapp.repository.TeacherRepository;
+import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.ParametersRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeacherListForApplyingRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeachersNameListRepo;
-import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TermRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RestController
 public class TestingRestController {
@@ -34,7 +32,7 @@ public class TestingRestController {
     @Autowired
     TeachersNameListRepo teachersNameListRepo;
     @Autowired
-    TermRepo termRepo;
+    ParametersRepo parametersRepo;
     @CrossOrigin
     @GetMapping("/teacherList")
     public List<TeacherListForApplying> getAll(){
@@ -55,7 +53,7 @@ public class TestingRestController {
     @CrossOrigin
     @GetMapping("/termNow")
     public String getCurrentTerm(){
-        return termRepo.findByCurrent(true).get(0).getTerm();
+        return parametersRepo.findByCurrent(true).get(0).getTerm();
     }
 
     //API gửi đăng kí nguyện vọng

@@ -3,6 +3,7 @@ package nghiavt.hustp2samiprojectapp.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import nghiavt.hustp2samiprojectapp.constant.AssignStatusEnum;
+import nghiavt.hustp2samiprojectapp.constant.ProjectTypeEnum;
 
 @Entity
 @Table(name = "assignment")
@@ -16,6 +17,10 @@ public class Assignment {
     private String appId;
     @Column(name = "student_id")
     private Integer studentId;
+    @Column(name = "project_type")
+    private ProjectTypeEnum prjType;
+    @Column
+    private String term;
     @Column(name = "instructor_id")
     private String instructorId;
     @Column(name = "reviewer_id")
