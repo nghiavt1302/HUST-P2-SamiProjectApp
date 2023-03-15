@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TestingController {
+public class ThymeleafController {
     @CrossOrigin
     @GetMapping("/sv-apply")
     public String studentApply(){

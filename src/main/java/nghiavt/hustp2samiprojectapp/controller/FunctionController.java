@@ -4,14 +4,8 @@ import nghiavt.hustp2samiprojectapp.constant.AssignStatusEnum;
 import nghiavt.hustp2samiprojectapp.constant.DepartmentEnum;
 import nghiavt.hustp2samiprojectapp.constant.OrientEnum;
 import nghiavt.hustp2samiprojectapp.model.dataObject.*;
-import nghiavt.hustp2samiprojectapp.model.entity.Application;
-import nghiavt.hustp2samiprojectapp.model.entity.Assignment;
-import nghiavt.hustp2samiprojectapp.model.entity.Student;
-import nghiavt.hustp2samiprojectapp.model.entity.Teacher;
-import nghiavt.hustp2samiprojectapp.repository.ApplicationRepository;
-import nghiavt.hustp2samiprojectapp.repository.AssignmentRepository;
-import nghiavt.hustp2samiprojectapp.repository.StudentRepository;
-import nghiavt.hustp2samiprojectapp.repository.TeacherRepository;
+import nghiavt.hustp2samiprojectapp.model.entity.*;
+import nghiavt.hustp2samiprojectapp.repository.*;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeacherListForApplyingRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeachersNameListRepo;
 import nghiavt.hustp2samiprojectapp.service.impl.AssignmentServiceImpl;
@@ -19,10 +13,7 @@ import nghiavt.hustp2samiprojectapp.service.impl.ParametersServiceImpl;
 import nghiavt.hustp2samiprojectapp.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +40,8 @@ public class FunctionController {
     AssignmentServiceImpl assignmentService;
     @Autowired
     AssignmentRepository assignmentRepository;
+    @Autowired
+    ProjectRepository projectRepository;
 
     // API lấy thông tin sinh viên hiện tại
     @CrossOrigin
@@ -139,9 +132,10 @@ public class FunctionController {
         return result;
     }
 
+    // Phân công GVHD tự động
     @CrossOrigin
     @GetMapping("/api/autoAssign")
-    public List<PlainAssignResult> autoAssign(){
+    public List<PlainAssignResult> autoAssign() {
         List<ApplicationList> input = getApplicationList();
         int m = input.size();
         List<Teacher> teachers = teacherRepository.findAll();
@@ -150,23 +144,21 @@ public class FunctionController {
         for (Teacher t : teachers) {
             sigmaPi += t.getParam();
         }
-        float digits = m/sigmaPi;
-        for (Teacher t: teachers) {
+        float digits = m / sigmaPi;
+        for (Teacher t : teachers) {
             t.setQuota((int) Math.ceil(digits * t.getParam()));
         }
 
-        for (ApplicationList app : input){
+        for (ApplicationList app : input) {
             List<Teacher> wishList = new ArrayList<>();
             try {
                 wishList.add(teacherRepository.findByTeacherId(app.getOpt1()).get(0));
                 wishList.add(teacherRepository.findByTeacherId(app.getOpt2()).get(0));
                 wishList.add(teacherRepository.findByTeacherId(app.getOpt3()).get(0));
-            }catch (Exception e){
-
-            }
+            } catch (Exception e) {}
             for (Teacher t : wishList) {
                 boolean duplicate = assignmentService.checkDuplicate(app.getStudentId(), t.getTeacherId());
-                if ((t.getAssigned() < t.getQuota()) && !duplicate){
+                if ((t.getAssigned() < t.getQuota()) && !duplicate) {
                     Assignment add = new Assignment();
                     add.setAssignId(app.getAppId());
                     add.setAppId(app.getAppId());
@@ -178,18 +170,18 @@ public class FunctionController {
                     break;
                 }
                 Assignment add = new Assignment();
-                    add.setAssignId(app.getAppId());
-                    add.setAppId(app.getAppId());
-                    add.setStatus(AssignStatusEnum.EXCEPTED);
-                    add.setStudentId(app.getStudentId());
-                    assignmentRepository.save(add);
+                add.setAssignId(app.getAppId());
+                add.setAppId(app.getAppId());
+                add.setStatus(AssignStatusEnum.EXCEPTED);
+                add.setStudentId(app.getStudentId());
+                assignmentRepository.save(add);
             }
         }
 
         List<Assignment> except = assignmentRepository.findByStatus(AssignStatusEnum.EXCEPTED);
         List<Teacher> remain = new ArrayList<>();
         for (Teacher t : teachers) {
-            if (t.getAssigned() < t.getQuota()){
+            if (t.getAssigned() < t.getQuota()) {
                 remain.add(t);
             }
         }
@@ -197,11 +189,11 @@ public class FunctionController {
         for (Assignment asg : except) {
             boolean assigned = false;
             for (Teacher t : remain) {
-                if (t.getAssigned() < t.getQuota()){
+                if (t.getAssigned() < t.getQuota()) {
                     OrientEnum orient1 = OrientEnum.valueOf(applicationRepository.findByAppId(asg.getAppId()).get(0).getOrient1());
-                    if (t.getDepartment() == DepartmentEnum.BMTUD && (orient1 == OrientEnum.PPTU || orient1 == OrientEnum.TTKH)){
+                    if (t.getDepartment() == DepartmentEnum.BMTUD && (orient1 == OrientEnum.PPTU || orient1 == OrientEnum.TTKH)) {
                         boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                        if (!duplicate){
+                        if (!duplicate) {
                             Assignment add = new Assignment();
                             add.setAssignId(asg.getAppId());
                             add.setAppId(asg.getAppId());
@@ -215,7 +207,7 @@ public class FunctionController {
                         }
                     } else if (t.getDepartment() == DepartmentEnum.BMTT && orient1 == OrientEnum.TH) {
                         boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                        if (!duplicate){
+                        if (!duplicate) {
                             Assignment add = new Assignment();
                             add.setAssignId(asg.getAppId());
                             add.setAppId(asg.getAppId());
@@ -229,7 +221,7 @@ public class FunctionController {
                         }
                     } else if (t.getDepartment() == DepartmentEnum.BMTCB && orient1 == OrientEnum.PPNN) {
                         boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                        if (!duplicate){
+                        if (!duplicate) {
                             Assignment add = new Assignment();
                             add.setAssignId(asg.getAppId());
                             add.setAppId(asg.getAppId());
@@ -244,13 +236,13 @@ public class FunctionController {
                     }
                 }
             }
-            if (!assigned){
+            if (!assigned) {
                 for (Teacher t : remain) {
-                    if (t.getAssigned() < t.getQuota()){
+                    if (t.getAssigned() < t.getQuota()) {
                         OrientEnum orient2 = OrientEnum.valueOf(applicationRepository.findByAppId(asg.getAppId()).get(0).getOrient2());
-                        if (t.getDepartment() == DepartmentEnum.BMTUD && (orient2 == OrientEnum.PPTU || orient2 == OrientEnum.TTKH)){
+                        if (t.getDepartment() == DepartmentEnum.BMTUD && (orient2 == OrientEnum.PPTU || orient2 == OrientEnum.TTKH)) {
                             boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                            if (!duplicate){
+                            if (!duplicate) {
                                 Assignment add = new Assignment();
                                 add.setAssignId(asg.getAppId());
                                 add.setAppId(asg.getAppId());
@@ -259,11 +251,12 @@ public class FunctionController {
                                 add.setStudentId(asg.getStudentId());
                                 assignmentRepository.save(add);
                                 t.setAssigned(t.getAssigned() + 1);
+//                                assigned = true;
                                 break;
                             }
                         } else if (t.getDepartment() == DepartmentEnum.BMTT && orient2 == OrientEnum.TH) {
                             boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                            if (!duplicate){
+                            if (!duplicate) {
                                 Assignment add = new Assignment();
                                 add.setAssignId(asg.getAppId());
                                 add.setAppId(asg.getAppId());
@@ -272,11 +265,12 @@ public class FunctionController {
                                 add.setStudentId(asg.getStudentId());
                                 assignmentRepository.save(add);
                                 t.setAssigned(t.getAssigned() + 1);
+//                                assigned = true;
                                 break;
                             }
                         } else if (t.getDepartment() == DepartmentEnum.BMTCB && orient2 == OrientEnum.PPNN) {
                             boolean duplicate = assignmentService.checkDuplicate(asg.getStudentId(), t.getTeacherId());
-                            if (!duplicate){
+                            if (!duplicate) {
                                 Assignment add = new Assignment();
                                 add.setAssignId(asg.getAppId());
                                 add.setAppId(asg.getAppId());
@@ -285,12 +279,21 @@ public class FunctionController {
                                 add.setStudentId(asg.getStudentId());
                                 assignmentRepository.save(add);
                                 t.setAssigned(t.getAssigned() + 1);
+//                                assigned = true;
                                 break;
                             }
                         }
                     }
                 }
             }
+//            else if (!assigned) {
+//                Assignment add = new Assignment();
+//                add.setAssignId(asg.getAppId());
+//                add.setAppId(asg.getAppId());
+//                add.setStatus(AssignStatusEnum.EXCEPTED);
+//                add.setStudentId(asg.getStudentId());
+//                assignmentRepository.save(add);
+//            }
         }
         List<Assignment> result = assignmentRepository.findAll();
         List<PlainAssignResult> output = new ArrayList<>();
@@ -303,7 +306,7 @@ public class FunctionController {
                 add.setInstructorName(teacherRepository.findByTeacherId(a.getInstructorId()).get(0).getFullName());
                 add.setStatus(a.getStatus());
 
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 add.setInstructorName(null);
             }
             output.add(add);
@@ -329,12 +332,24 @@ public class FunctionController {
                 add.setOpt2(teacherRepository.findByTeacherId(a.getOpt2()).get(0).getFullName());
                 add.setOpt3(teacherRepository.findByTeacherId(a.getOpt3()).get(0).getFullName());
             }
-            catch (Exception e){
-
-            }
+            catch (Exception e){}
             result.add(add);
         }
         return result;
+    }
+
+    // Lấy tất cả thông tin về các đồ án
+    @CrossOrigin
+    @GetMapping("/api/findAllProject")
+    public List<Project> findAllProject(){
+        return projectRepository.findAll();
+    }
+
+    // Tìm đồ án theo keywords
+    @CrossOrigin
+    @GetMapping("/api/findProjectByKeywords")
+    public List<Project> findProjectByKeywords(@RequestParam (name = "key") String key){
+        return projectRepository.findAllByKeywordsContains(key);
     }
 
     @CrossOrigin

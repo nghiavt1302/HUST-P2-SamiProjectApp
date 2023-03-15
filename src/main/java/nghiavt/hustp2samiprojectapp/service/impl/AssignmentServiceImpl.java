@@ -1,5 +1,6 @@
 package nghiavt.hustp2samiprojectapp.service.impl;
 
+import nghiavt.hustp2samiprojectapp.constant.AssignStatusEnum;
 import nghiavt.hustp2samiprojectapp.model.entity.Assignment;
 import nghiavt.hustp2samiprojectapp.repository.AssignmentRepository;
 import nghiavt.hustp2samiprojectapp.service.AssignmentService;
@@ -34,5 +35,16 @@ public class AssignmentServiceImpl implements AssignmentService {
             }
         }
         return false;
+    }
+
+    @Override
+    public String acceptAssign(String asgId, AssignStatusEnum status) {
+        List<Assignment> assignments = assignmentRepository.findByAssignId(asgId);
+        if (!assignments.isEmpty()){
+            Assignment add = assignments.get(0);
+            add.setStatus(AssignStatusEnum.ACCEPTED);
+            assignmentRepository.save(add);
+        }
+        return "Success!";
     }
 }
