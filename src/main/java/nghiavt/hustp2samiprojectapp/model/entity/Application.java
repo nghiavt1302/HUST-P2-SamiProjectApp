@@ -16,19 +16,14 @@ public class Application {
     @Column(name = "project_type")
     @Enumerated(EnumType.STRING)
     private ProjectTypeEnum projectType;
-
+    @Column(name = "student_id")
+    private Integer studentId;
     private String term;
-
     private String orient1;
     private String orient2;
-
     private String opt1;
-
     private String opt2;
-
     private String opt3;
     @Column(name = "submit_time")
     private Timestamp submitTime;
-    @Column(name = "student_id")
-    private Integer studentId;
 }

@@ -13,10 +13,10 @@ public class Parameters {
     @Id
     private String term;
     @Column(name = "bmtcb_param")
-    private String bmtcbParam;
+    private Float bmtcbParam;
     @Column(name = "bmtt_param")
-    private String bmttParam;
+    private Float bmttParam;
     @Column(name = "bmtud_param")
-    private String bmtudParam;
+    private Float bmtudParam;
     private Boolean current;
 }

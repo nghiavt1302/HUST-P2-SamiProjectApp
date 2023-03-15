@@ -18,6 +18,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/termNow", "/teacherList", "/username", "/api/**").permitAll()
                 .requestMatchers("/sv-homeinfo/**", "/sv-apply/**").hasAuthority("STUDENT")
                 .requestMatchers("/gv-homeinfo/**").hasAuthority("TEACHER")
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 .and().formLogin()
                 .successHandler(((request, response, authentication) -> {
                     String targetUrl ="/login";

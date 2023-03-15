@@ -15,5 +15,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
     List<Teacher> findAllByDepartment(DepartmentEnum department);
     List<Teacher> findAllByExpertise(String expertise);
 
+    List<Teacher> findByTeacherId(String teacherId);
     List<Teacher> findByEmail(String email);
 }

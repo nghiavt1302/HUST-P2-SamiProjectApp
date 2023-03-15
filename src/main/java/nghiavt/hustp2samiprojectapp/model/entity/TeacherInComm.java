@@ -1,19 +1,19 @@
 package nghiavt.hustp2samiprojectapp.model.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import nghiavt.hustp2samiprojectapp.constant.CommitteeRoleEnum;
 
 @Entity
-@Table(name = "committee")
+@Table(name = "teacherInComm")
 @Data
-public class Committee {
+public class TeacherInComm {
     @Id
-    @Column(name = "comm_id")
+    private Integer id;
+    private String teacherId;
     private String commId;
-    private String term;
-    private Integer number;
-    private String orient;
+    private CommitteeRoleEnum Role;
+
 }

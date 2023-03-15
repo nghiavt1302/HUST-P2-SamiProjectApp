@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ParametersRepo extends JpaRepository<Parameters, String> {
     List<Parameters> findByCurrent(Boolean current);
+    List<Parameters> findByTerm(String term);
 }

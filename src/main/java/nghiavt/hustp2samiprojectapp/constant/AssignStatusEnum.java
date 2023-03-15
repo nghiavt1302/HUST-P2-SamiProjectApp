@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AssignStatusEnum {
-    UNASSIGNED, ASSIGNED, ACCEPTED
+    UNASSIGNED, ASSIGNED, ACCEPTED, EXCEPTED
 }

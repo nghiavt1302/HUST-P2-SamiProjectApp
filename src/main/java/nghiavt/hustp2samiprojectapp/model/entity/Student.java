@@ -13,6 +13,7 @@ public class Student {
     @Id
     @Column(name = "student_id")
     private Integer studentId;
+    private String email;
     @Column(name = "full_name")
     private String fullName;
 
@@ -25,5 +26,5 @@ public class Student {
     private float cpa;
 
     private String phone;
-    private String email;
+
 }

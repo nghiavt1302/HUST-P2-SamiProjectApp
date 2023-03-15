@@ -3,8 +3,8 @@ package nghiavt.hustp2samiprojectapp.constant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
-public enum ProjectQualityEnum {
-    QUALIFIED, UNQUALIFIED, REVIEWED, DEFENDED
+@AllArgsConstructor
+public enum OrientEnum {
+    TH, TTKH, PPTU, PPNN
 }

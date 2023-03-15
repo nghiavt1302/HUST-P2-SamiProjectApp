@@ -13,14 +13,12 @@ public class Teacher {
     private String teacherId;
     @Column(name = "full_name")
     private String fullName;
-
-    private String phone;
+    private String email;
     @Enumerated(EnumType.STRING)
     private DepartmentEnum department;
-
+    private String phone;
     private String expertise;
-
+    private float param;
+    private Integer assigned;
     private Integer quota;
-
-    private String email;
 }

@@ -12,12 +12,9 @@ public class MyUser {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
-
     private String email;
-
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
-
     private Boolean status;
 }

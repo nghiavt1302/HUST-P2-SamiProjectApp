@@ -10,14 +10,14 @@ import nghiavt.hustp2samiprojectapp.constant.ProjectTypeEnum;
 @Data
 public class Assignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "assign_id")
-    private Integer assignId;
+    private String assignId;
     @Column(name = "app_id")
     private String appId;
     @Column(name = "student_id")
     private Integer studentId;
     @Column(name = "project_type")
+    @Enumerated(EnumType.STRING)
     private ProjectTypeEnum prjType;
     @Column
     private String term;
