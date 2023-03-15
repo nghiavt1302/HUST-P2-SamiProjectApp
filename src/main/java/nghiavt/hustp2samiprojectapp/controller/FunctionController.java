@@ -145,7 +145,7 @@ public class FunctionController {
         List<ApplicationList> input = getApplicationList();
         int m = input.size();
         List<Teacher> teachers = teacherRepository.findAll();
-        Collections.shuffle(teachers);
+//        Collections.shuffle(teachers);
         float sigmaPi = 0;
         for (Teacher t : teachers) {
             sigmaPi += t.getParam();
@@ -155,57 +155,35 @@ public class FunctionController {
             t.setQuota((int) Math.ceil(digits * t.getParam()));
         }
 
-        for (ApplicationList app : input) {
-            for (Teacher t : teachers) {
-                if (app.getOpt1()!=null && app.getOpt1().equals(t.getTeacherId()) && (t.getAssigned() < t.getQuota())) {
-                    boolean duplicate = assignmentService.checkDuplicate(app.getStudentId(), t.getTeacherId());
-                    if (!duplicate) {
-                        Assignment add = new Assignment();
-                        add.setAssignId(app.getAppId());
-                        add.setAppId(app.getAppId());
-                        add.setInstructorId(t.getTeacherId());
-                        add.setStatus(AssignStatusEnum.ASSIGNED);
-                        add.setStudentId(app.getStudentId());
-                        assignmentRepository.save(add);
-                        t.setAssigned(t.getAssigned() + 1);
-                        break;
-                    }
-                } else if (app.getOpt2()!=null && app.getOpt2().equals(t.getTeacherId()) && (t.getAssigned() < t.getQuota())) {
-                    boolean duplicate = assignmentService.checkDuplicate(app.getStudentId(), t.getTeacherId());
-                    if (!duplicate) {
-                        Assignment add = new Assignment();
-                        add.setAssignId(app.getAppId());
-                        add.setAppId(app.getAppId());
-                        add.setInstructorId(t.getTeacherId());
-                        add.setStatus(AssignStatusEnum.ASSIGNED);
-                        add.setStudentId(app.getStudentId());
-                        assignmentRepository.save(add);
-                        t.setAssigned(t.getAssigned() + 1);
-                        break;
-                    }
-                } else if (app.getOpt3()!=null && app.getOpt3().equals(t.getTeacherId()) && (t.getAssigned() < t.getQuota())) {
-                    boolean duplicate = assignmentService.checkDuplicate(app.getStudentId(), t.getTeacherId());
-                    if (!duplicate) {
-                        Assignment add = new Assignment();
-                        add.setAssignId(app.getAppId());
-                        add.setAppId(app.getAppId());
-                        add.setInstructorId(t.getTeacherId());
-                        add.setStatus(AssignStatusEnum.ASSIGNED);
-                        add.setStudentId(app.getStudentId());
-                        assignmentRepository.save(add);
-                        t.setAssigned(t.getAssigned() + 1);
-                        break;
-                    }
-                }else {
+        for (ApplicationList app : input){
+            List<Teacher> wishList = new ArrayList<>();
+            try {
+                wishList.add(teacherRepository.findByTeacherId(app.getOpt1()).get(0));
+                wishList.add(teacherRepository.findByTeacherId(app.getOpt2()).get(0));
+                wishList.add(teacherRepository.findByTeacherId(app.getOpt3()).get(0));
+            }catch (Exception e){
+
+            }
+            for (Teacher t : wishList) {
+                boolean duplicate = assignmentService.checkDuplicate(app.getStudentId(), t.getTeacherId());
+                if ((t.getAssigned() < t.getQuota()) && !duplicate){
                     Assignment add = new Assignment();
+                    add.setAssignId(app.getAppId());
+                    add.setAppId(app.getAppId());
+                    add.setInstructorId(t.getTeacherId());
+                    add.setStatus(AssignStatusEnum.ASSIGNED);
+                    add.setStudentId(app.getStudentId());
+                    assignmentRepository.save(add);
+                    t.setAssigned(t.getAssigned() + 1);
+                    break;
+                }
+                Assignment add = new Assignment();
                     add.setAssignId(app.getAppId());
                     add.setAppId(app.getAppId());
                     add.setStatus(AssignStatusEnum.EXCEPTED);
                     add.setStudentId(app.getStudentId());
                     assignmentRepository.save(add);
-                }
             }
-
         }
 
         List<Assignment> except = assignmentRepository.findByStatus(AssignStatusEnum.EXCEPTED);
