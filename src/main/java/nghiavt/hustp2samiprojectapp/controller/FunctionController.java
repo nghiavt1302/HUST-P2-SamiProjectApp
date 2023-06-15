@@ -5,6 +5,7 @@ import nghiavt.hustp2samiprojectapp.constant.DepartmentEnum;
 import nghiavt.hustp2samiprojectapp.constant.OrientEnum;
 import nghiavt.hustp2samiprojectapp.model.dataObject.*;
 import nghiavt.hustp2samiprojectapp.model.entity.*;
+import nghiavt.hustp2samiprojectapp.model.testing.TeacherAssignments;
 import nghiavt.hustp2samiprojectapp.repository.*;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeacherListForApplyingRepo;
 import nghiavt.hustp2samiprojectapp.repository.dataObjectRepository.TeachersNameListRepo;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class FunctionController {
@@ -50,6 +48,12 @@ public class FunctionController {
         String email = userService.getCurUsername(authentication);
         List<Student> students = studentRepository.findByEmail(email);
         return students.get(0);
+    }
+
+    @CrossOrigin
+    @GetMapping("/api/getTeacherAsg/{email}")
+    public Collection<TeacherAssignments> mapToTeacherAsgm(@PathVariable String email){
+        return assignmentService.mapToTeacherAsgm(email);
     }
 
     // API Lấy email của user hiện tại
